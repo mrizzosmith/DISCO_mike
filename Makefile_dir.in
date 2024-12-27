@@ -1,0 +1,10 @@
+### Makefile_dir.in for Disco ###
+
+# This file contains machine-specific variables for building Disco.
+
+# Location of HDF5 Library
+#H55 = /Users/Shark/Documents/hdf5-1.10.1/hdf5
+#H55 = /nasa/hdf5/1.8.3/gcc/mpt
+#H55 = /Users/andreaderdzinski/Documents/hdf5-1.12.2
+H55 = /accre/arch/easybuild/software/MPI/GCC/11.3.0/OpenMPI/4.1.4/HDF5/1.12.2
+
