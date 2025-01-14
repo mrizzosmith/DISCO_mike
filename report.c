@@ -24,11 +24,14 @@ void report( struct domain * theDomain ){
    struct planet * thePlanets = theDomain->thePlanets;
    int Npl = theDomain->Npl;
 
-   double r_p = 0.0;
-   double p_p = 0.0; 
+   double r_prim = 0.0;
+   double p_prim = 0.0;
+
+   double r_sec = 0.0;
+   double p_sec = 0.0; 
    if( Npl > 1 ){
-     r_p = thePlanets[1].r;
-     p_p = thePlanets[1].phi;   
+     r_sec = thePlanets[1].r;
+     p_sec = thePlanets[1].phi;   
    }
 
    double * r_jph = theDomain->r_jph;
@@ -50,9 +53,9 @@ void report( struct domain * theDomain ){
    //double Br2     = 0.0;
    //double B2      = 0.0;
    double Power  = 0.0;
-   double Torque = 0.0;
-   double Torque2 = 0.0;
-   double Fr=0.0;
+   double Torque_prim = 0.0;
+   double Torque_sec = 0.0;
+   double Fr_sec=0.0;
    double PsiR = 0.0;
    double PsiI = 0.0;
    double Vol = 0.0;
@@ -128,13 +131,17 @@ void report( struct domain * theDomain ){
 
             // Calculate quantities on the secondary
             if( Npl > 1 ){
-               double fr,fp,fz,fp2;
-               double rp = thePlanets[1].r;
-               double om = thePlanets[1].omega;
-               double vr = thePlanets[1].vr;
+	       // MRS For 3D update fz 
+               double fr_prim,fp_prim,fz, fr_sec, fp_sec;
+               double r_prim = thePlanets[0].r;
+               double p_prim = thePlanets[0].phi;
+               double r_sec = thePlanets[1].r;
+               double p_sec = thePlanets[1].phi;
+               double om_sec = thePlanets[1].omega;
+               double vr_sec = thePlanets[1].vr;
                //double mp = thePlanets[1].M;
-               planetaryForce( thePlanets   , r , phi , 0.0 , &fr , &fp2 , &fz , 1 );
-               planetaryForce( thePlanets+1 , r , phi , 0.0 , &fr , &fp  , &fz , 1 );
+               planetaryForce( thePlanets   , r , phi , 0.0 , &fr_prim , &fp_prim , &fz , 1 );
+               planetaryForce( thePlanets+1 , r , phi , 0.0 , &fr_sec , &fp_sec  , &fz , 1 );
 
                // amd:
                // Call planetary sink here to return drho_dt
@@ -147,10 +154,11 @@ void report( struct domain * theDomain ){
                MdotP += drho_dt_sink*dV;
 
                // Accretion torque
+               // MRS double check this before using accretion troque values
                double vp = r*omega;
                double dphi2 = phi - thePlanets[1].phi;
-               double vp2 = vp * cos(dphi2) + vr*sin(dphi2);
-               double dj = rp * (vp2 - rp*om);
+               double vp2 = vp * cos(dphi2) + vr_sec*sin(dphi2);
+               double dj = r_sec * (vp2 - r_sec*om_sec);
 
                JdotP += drho_dt_sink * dj * dV;
                //
@@ -162,17 +170,16 @@ void report( struct domain * theDomain ){
                //double script_r = sqrt(dx*dx+dy*dy);
                //double rH = pow( thePlanets[1].M/3. , 1./3. );
 
-               Torque -= (rho-1.0)*rp*fp*dV;
-               Power  -= (rho-1.0)*( rp*om*fp + vr*fr )*dV;
-               Torque2 -= (rho-1.0)*rp*fp2*dV;
-               Fr -= (rho-1.0)*fr*dV;
+               Torque_sec -= (rho-1.0)*r_sec*fp_sec*dV;
+               Power  -= (rho-1.0)*( r_sec*om_sec*fp_sec + vr_sec*fr_sec )*dV;
+               Torque_prim -= (rho-1.0)*r_prim*fp_prim*dV;
+               Fr_sec -= (rho-1.0)*fr_sec*dV;
 
-               double pp = thePlanets[1].phi;
-               double rhill = pow(thePlanets[1].M/3., 1./3. ) * rp;
+               double rhill = pow(thePlanets[1].M/3., 1./3. ) * r_sec;
                
-               double scriptr2 = rp*rp + r*r - 2.*r*rp*cos(phi-pp);
+               double scriptr2 = r_sec*r_sec + r*r - 2.*r*r_sec*cos(phi-p_sec);
                   if( scriptr2 < rhill*rhill ){
-                     Torq_hill -= (rho-1.0)*rp*fp*dV;
+                     Torq_hill -= (rho-1.0)*r_sec*fp_sec*dV;
                   }
                
 
@@ -200,12 +207,12 @@ void report( struct domain * theDomain ){
    //MPI_Allreduce( MPI_IN_PLACE , &BrBp    , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &PdV     , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &Vol     , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
-   MPI_Allreduce( MPI_IN_PLACE , &Torque  , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
-   MPI_Allreduce( MPI_IN_PLACE , &Torque2 , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
+   MPI_Allreduce( MPI_IN_PLACE , &Torque_prim  , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
+   MPI_Allreduce( MPI_IN_PLACE , &Torque_sec , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &MdotP   , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &JdotP   , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &Power   , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
-   MPI_Allreduce( MPI_IN_PLACE , &Fr      , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
+   MPI_Allreduce( MPI_IN_PLACE , &Fr_sec      , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &PsiR    , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &PsiI    , 1 , MPI_DOUBLE , MPI_SUM , grid_comm );
    MPI_Allreduce( MPI_IN_PLACE , &rho_min    , 1 , MPI_DOUBLE , MPI_MIN , grid_comm );
@@ -225,8 +232,8 @@ void report( struct domain * theDomain ){
 
    if( rank==0 ){
       FILE * rFile = fopen("report.dat","a");
-      fprintf(rFile,"%e %e %e %e %e %e %e %e %e %e %e %e %e\n",
-                t,Torque,Torq_hill,Torque2,r_p,p_p,MdotP,JdotP,Fr,rho_min,rhoavg_min,Mass,Mdot);
+      fprintf(rFile,"%e %e %e %e %e %e %e %e %e %e %e %e %e %e %e\n",
+                t,Torque_sec,Torq_hill,Torque_prim,r_sec,p_sec,r_prim, p_prim, MdotP,JdotP,Fr,rho_min,rhoavg_min,Mass,Mdot);
       //fprintf(rFile,"%e %e %e ",t,Torque,Power);
       //for( j=0 ; j<10 ; ++j ) fprintf(rFile,"%e %e ",T_cut[j],P_cut[j]);
       //fprintf(rFile,"\n");

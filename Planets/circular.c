@@ -40,6 +40,8 @@ void initializePlanets( struct planet * thePlanets ){
 }
 
 void movePlanets( struct planet * thePlanets , double t , double dt ){
+// MRS uncomment the line below to enable primary motion
+// thePlanets[0].phi += thePlanets[0].omega*dt;
    thePlanets[1].phi += thePlanets[1].omega*dt;
 }
 

@@ -29,8 +29,12 @@ double get_om1( double r ){
 
 double get_cs2( double r ){
 //   double nu = .5;
+//   MRS This cs2 corresponds to aspect disk
    return( 1./Mach/Mach/r );
+
+//   MRS This cs2 corresponds to a constant nu viscosity (but double check / derive this)
 //   return( 1./Mach/Mach );
+	
 //   return(1.0);
 }
 

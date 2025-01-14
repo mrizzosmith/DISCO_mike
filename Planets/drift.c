@@ -27,6 +27,7 @@ int planet_motion_analytic( void ){
 }
 
 double drift_pos( double R , double t ){
+// MRS variable r_init corresponds to setting final separation of drift (double check before using)
    return( r_init * pow( 1. + R*( t - t_max )/dexp , dexp ) );
 }
 
@@ -38,7 +39,7 @@ void initializePlanets( struct planet * thePlanets ){
 
    thePlanets[0].M     = 1.0 - mu; 
    thePlanets[0].vr    = 0.0; 
-   thePlanets[0].omega = 0.0; 
+   thePlanets[0].omega = pow(r, -1.5); 
    thePlanets[0].r     = r*mu; 
    thePlanets[0].phi   = M_PI; 
    thePlanets[0].eps   = 0.0;
