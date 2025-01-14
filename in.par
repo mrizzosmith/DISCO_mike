@@ -1,66 +1,73 @@
 
-//Disco Parameter File//
-Restart			0	//Restart from input.h5
+//Disco Parameter File// ** = modified more frequently
+
+Restart			0		// ** If 1, Restart the simulation from input.h5 
 
 //Time Range//
-T_Start			0.0 //1.0
-T_End			100. // 
-T_Times_2pi		1   // If this=1, T_end is in orbits at r=1
+T_Start			0.0		// 
+T_End			5000. 	// ** Total simulation time 
+T_Times_2pi		1   	// If this=1, T_end is in orbits at r=1
 
 //Output Frequency//
-Num_Reports			1e5
-Num_Snapshots		0
-Num_Checkpoints		10
-Use_Logtime			0
+Num_Reports		1e5		// ** Number of times to output data into report file
+Num_Snapshots		0		// 
+Num_Checkpoints		10		// ** Number of .h5 files (generated evenly over the full sim time)	
+Use_Logtime		0
 
 //Grid Dimensions//
-Num_R			600
-Num_Z			1
-aspect			1.0	//Cell Aspect Ratio, for calculating N_phi
+Num_R			666		// ** Radial resolution 
+Num_Z			1		// Vertical resolution (1 for 2D sims)
+aspect			1.0		// Cell Aspect Ratio, for calculating N_phi. If 1, 
 Max_Aspect_Short	1000.0	
-Max_Aspect_Long		1000.0	//Aspect Ratio AMR Refinement Criteria
+Max_Aspect_Long		1000.0	// Aspect Ratio AMR Refinement Criteria
 
 //Domain Parameters//
-R_Min			0.5
-R_Max		 	3.0
-Z_Min			-0.25 //-0.0625
-Z_Max			0.25  //0.0625
-Z_Periodic		0
-Phi_Max			1.0
-P_Times_2pi		1
-Log_Zoning		1	//0=Uniform, 1=Log, 2=Hybrid
-Log_Radius		1.0	//Only for option 2 of Log_Zoning
+R_Min			0.5		// ** Inner disk radius
+R_Max			6.0		// ** Outer disk radius
+Z_Min			-0.25 	//
+Z_Max			0.25  	//
+Z_Periodic		0		//
+Phi_Max			1.0		// 
+P_Times_2pi		1		//
+Log_Zoning		1		// Spacing of radial resolution (0=Uniform, 1=Log, 2=Hybrid)
+Log_Radius		1.0		// If Log_Zoning=2, then set radius after which to begin log spacing
 
 //Numerical Parameters
-CFL					0.5
-PLM					1.5
-Riemann_Solver		1	//0=HLL, 1=HLLC, 2=HLLD
-Mesh_Motion			3	//0=Fixed, 1=By Cell, 2=Riemann Solver, 3=Avg, 4=Keplerian
-Absorbing_BC		0
-Initial_Regrid		0
-Density_Floor		1e-5
-Pressure_Floor		0.0 //1e-5
+CFL			0.5		// ** CFL: Courant–Friedrichs–Lewy condition, usually set to 0.1-0.5	
+PLM			1.5		// Slope limiting parameter for the Riemann solver
+Riemann_Solver		1		// 0=HLL, 1=HLLC, 2=HLLD
+Mesh_Motion		3		// 0=Fixed, 1=By Cell, 2=Riemann Solver, 3=Avg, 4=Keplerian
+Absorbing_BC		0		//
+Initial_Regrid		0		//
+Density_Floor		1e-5	// Minimum value for density
+Pressure_Floor		0.0 	// Minimum value for pressure
 Constrained_Transport   0
-
+	
 //Hydro Parameters
-Adiabatic_Index		1.001 //1.66666666667
-Isothermal			1
-Use_Viscosity		1
-Viscosity			0.1
-Use_As_Alpha		1
+Adiabatic_Index		1.001 	// ** Set close to 1 for isothermal EOS, or 1.66666666667 for adiabatic
+Isothermal		1		// ** Equation of state
+Use_Viscosity		1		// ** If 1, include viscosity
+Viscosity		0.1		// ** Value of viscosity (kinematic viscosity by default)
+Use_As_Alpha		1		// ** If 1, the value above is for alpha viscosity
 
 //Planet Parameters	
-Mass_Ratio				1.e-4
-R_Initial      			1.0
-Eccentricity			0.0
-Drift_Rate			0.0	// -2.12752E-5  // for inspiral from 10.5 rS to 8 rS, with r0 = 8 rS
-Drift_Exp				0.25
-Eps_Frac                0.5 //fraction of scale height, eps = eps_frac/mach
-Use_Sink                1
-Sink_Timescale          1.
-Sink_Radius             1. //Factors of the smoothing length
+Mass_Ratio		1.e-3	// ** Mass ratio of secondary/primary mass
+Eps_Frac            	0.5 	// ** Smoothing of potential as a fraction of scale height: eps=eps_frac/mach
+Use_Sink            	0		// ** If 1, the secondary becomes a sink
+Sink_Timescale      	1.		// Timescale of accretion into the sink
+Sink_Radius         	1. 		// Sink radius in factors of the smoothing length
+
+// Planet Motion (only if running Planets/drift or Planets/inspiral)
+R_Initial      		1.	
+// If running Planets/drift, this is actually the final position of the planet after a forced migration. 
+// If planets are not migrating, then this doesn't matter. 
+Drift_Rate		0.	
+// If forcing planet to mirgate, this is the dimensionless migration rate. 
+// For a GW-driven inspiral from from 10.5 rS to 8 rS, with r0 = 8 rS, rate = -2.12752E-5. 
+Drift_Exp		0.25	// Exponent for the inspiral rate. For GWs, this is 0.25
+Eccentricity		0.0	// ** Let's stick with zero for now!
 
 //Disk Parameters
-Mach_Number		10.0
-Include_Atmos		1
+Mach_Number		20.0 	// ** Disk Mach number, related to disk thickness by mach = r/h
+Include_Atmos		0	// This is related to initialized the disk with the planet.
 
