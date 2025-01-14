@@ -1,10 +1,10 @@
 
 //Disco Parameter File// ** = modified more frequently
 
-Restart			0		// ** If 1, Restart the simulation from input.h5 
+Restart			0	// ** If 1, Restart the simulation from input.h5 
 
 //Time Range//
-T_Start			0.0		// 
+T_Start			0.0	// 
 T_End			5000. 	// ** Total simulation time 
 T_Times_2pi		1   	// If this=1, T_end is in orbits at r=1
 
@@ -24,8 +24,8 @@ Max_Aspect_Long		1000.0	// Aspect Ratio AMR Refinement Criteria
 //Domain Parameters//
 R_Min			0.5		// ** Inner disk radius
 R_Max			6.0		// ** Outer disk radius
-Z_Min			-0.25 	//
-Z_Max			0.25  	//
+Z_Min			-0.25 		//
+Z_Max			0.25  		//
 Z_Periodic		0		//
 Phi_Max			1.0		// 
 P_Times_2pi		1		//
@@ -39,20 +39,20 @@ Riemann_Solver		1		// 0=HLL, 1=HLLC, 2=HLLD
 Mesh_Motion		3		// 0=Fixed, 1=By Cell, 2=Riemann Solver, 3=Avg, 4=Keplerian
 Absorbing_BC		0		//
 Initial_Regrid		0		//
-Density_Floor		1e-5	// Minimum value for density
-Pressure_Floor		0.0 	// Minimum value for pressure
+Density_Floor		1e-5		// Minimum value for density
+Pressure_Floor		0.0 		// Minimum value for pressure
 Constrained_Transport   0
 	
 //Hydro Parameters
-Adiabatic_Index		1.001 	// ** Set close to 1 for isothermal EOS, or 1.66666666667 for adiabatic
+Adiabatic_Index		1.001		// ** Set close to 1 for isothermal EOS, or 1.66666666667 for adiabatic
 Isothermal		1		// ** Equation of state
 Use_Viscosity		1		// ** If 1, include viscosity
 Viscosity		0.1		// ** Value of viscosity (kinematic viscosity by default)
 Use_As_Alpha		1		// ** If 1, the value above is for alpha viscosity
 
 //Planet Parameters	
-Mass_Ratio		1.e-3	// ** Mass ratio of secondary/primary mass
-Eps_Frac            	0.5 	// ** Smoothing of potential as a fraction of scale height: eps=eps_frac/mach
+Mass_Ratio		1.e-3		// ** Mass ratio of secondary/primary mass
+Eps_Frac            	0.5 		// ** Smoothing of potential as a fraction of scale height: eps=eps_frac/mach
 Use_Sink            	0		// ** If 1, the secondary becomes a sink
 Sink_Timescale      	1.		// Timescale of accretion into the sink
 Sink_Radius         	1. 		// Sink radius in factors of the smoothing length
