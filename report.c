@@ -233,7 +233,7 @@ void report( struct domain * theDomain ){
    if( rank==0 ){
       FILE * rFile = fopen("report.dat","a");
       fprintf(rFile,"%e %e %e %e %e %e %e %e %e %e %e %e %e %e %e\n",
-                t,Torque_sec,Torq_hill,Torque_prim,r_sec,p_sec,r_prim, p_prim, MdotP,JdotP,Fr,rho_min,rhoavg_min,Mass,Mdot);
+                t,Torque_sec,Torq_hill,Torque_prim,r_sec,p_sec,r_prim, p_prim, MdotP,JdotP,Fr_sec,rho_min,rhoavg_min,Mass,Mdot);
       //fprintf(rFile,"%e %e %e ",t,Torque,Power);
       //for( j=0 ; j<10 ; ++j ) fprintf(rFile,"%e %e ",T_cut[j],P_cut[j]);
       //fprintf(rFile,"\n");
