@@ -30,7 +30,7 @@ void initializePlanets( struct planet * thePlanets ){
    thePlanets[0].phi   = M_PI;
    thePlanets[0].eps   = 0.0;
 
-   thePlanets[1].M     = 0.0;
+   thePlanets[1].M     = mu;
    thePlanets[1].vr    = 0.0;
    thePlanets[1].omega = om;
    thePlanets[1].r     = r*(1.0 - mu);
