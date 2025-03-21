@@ -6,7 +6,7 @@ static double gam = 0.0;
 
 void setDiskParams( struct domain * theDomain ){
    Mach = theDomain->theParList.Disk_Mach;
-   gam = theDomain->TheParList.Adiabatic_Index;
+   gam = theDomain->theParList.Adiabatic_Index;
 }
 
 double mesh_om( double r ){
