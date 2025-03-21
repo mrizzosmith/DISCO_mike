@@ -2,9 +2,11 @@
 #include "mike.h"
 
 static double Mach = 0.0;
+static double gam = 0.0;
 
 void setDiskParams( struct domain * theDomain ){
    Mach = theDomain->theParList.Disk_Mach;
+   gam = theDomain->TheParList.Adiabatic_Index;
 }
 
 double mesh_om( double r ){
@@ -30,10 +32,10 @@ double get_om1( double r ){
 double get_cs2( double r ){
 //   double nu = .5;
 //   MRS This cs2 corresponds to aspect disk
-   return( 1./Mach/Mach/r );
+   return( 1./Mach/Mach/r/gam );
 
 //   MRS This cs2 corresponds to a constant nu viscosity (but double check / derive this)
-//   return( 1./Mach/Mach );
+//   return( 1./Mach/Mach/gam );
 	
 //   return(1.0);
 }

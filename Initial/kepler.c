@@ -16,7 +16,7 @@ void initial( double * prim , double * x ){
    double r = x[0];
 
    double rho = 1.0;
-   double Pp = rho/Mach/Mach;
+   double Pp = rho/Mach/Mach/gam;
    double omega02 = 1.0/pow(r,3.);
    double omegaP2 = 0.0;
 
